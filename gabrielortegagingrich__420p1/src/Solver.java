@@ -8,11 +8,7 @@ public abstract class Solver {
       this.board = board;
 
       for (int i = 0; i < board.length; i++) {
-         for (int j = 0; j < board[i].length; i++) {
-            if (board[i][j] == 0) {
-               empty = new int[]{i, j};
-            }
-         }
+         empty = new int[]{i/3, i%3};
       }
 
       if (empty == null) {
