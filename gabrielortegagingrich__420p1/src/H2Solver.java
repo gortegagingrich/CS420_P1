@@ -22,8 +22,6 @@ public class H2Solver extends Solver {
             distance = Math.abs(expectedX - i/3);
             distance += Math.abs(expectedY - i%3);
             out += distance;
-
-            System.out.printf("Expected position: %d,%d\nActual position: %d,%d\nDistance:%d\n",expectedX, expectedY, i/3, i%3, distance);
         }
 
         return out;
