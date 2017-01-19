@@ -15,13 +15,14 @@ public class H2Solver extends Solver {
         int expectedX, expectedY, distance;
 
         for (int i = 0; i < 9; i++) {
-            expectedX = board[i/3][i%3]/3;
-            expectedY = board[i/3][i%3]%3;
+            if (board[i/3][i%3] != 0) {
+                expectedX = board[i / 3][i % 3] / 3;
+                expectedY = board[i / 3][i % 3] % 3;
 
-
-            distance = Math.abs(expectedX - i/3);
-            distance += Math.abs(expectedY - i%3);
-            out += distance;
+                distance = Math.abs(expectedX - i / 3);
+                distance += Math.abs(expectedY - i % 3);
+                out += distance;
+            }
         }
 
         return out;

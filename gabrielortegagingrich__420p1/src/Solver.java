@@ -16,6 +16,18 @@ public abstract class Solver {
       }
    }
 
+   public static boolean isSolvable(int[][] board) {
+      int inversionCount = 0;
+
+      for (int i = 0; i < 8; i++) {
+         if (board[i/3][i%3] > board[(i+1)/3][(i+1)%3]) {
+            inversionCount++;
+         }
+      }
+
+      return (inversionCount%2 == 0);
+   }
+
    /**
     * @return
     */

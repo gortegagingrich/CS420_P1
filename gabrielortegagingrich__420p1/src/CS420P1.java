@@ -23,15 +23,20 @@ public class CS420P1 {
                if (str.length() == 9) {
                   i = 0;
                   board = new int[3][3];
+
                   for (char c : str.toCharArray()) {
                      board[i / 3][i++ % 3] = c - '0';
                   }
 
-                  solve = new H1Solver(board);
-                  System.out.printf("H1(n): %d\n", solve.solve());
+                  if (Solver.isSolvable(board)) {
+                     solve = new H1Solver(board);
+                     System.out.printf("H1(n): %d\n", solve.solve());
 
-                  solve = new H2Solver(board);
-                  System.out.printf("H2(n): %d\n\n", solve.solve());
+                     solve = new H2Solver(board);
+                     System.out.printf("H2(n): %d\n\n", solve.solve());
+                  } else {
+                     System.out.println("Not solvable\n");
+                  }
                }
             }
          }
