@@ -33,20 +33,20 @@ public class CS420P1 {
                   solve = new H1Solver(board);
                   n = solve.solve();
                   if (n != null) {
-                     System.out.printf("H1 depth: %d", n.getPath().length() / 10);
-                     System.out.printf("Path:\n%s\n%s\n", n.getPath(), n.getState());
+                     System.out.printf("H1 depth: %d\n", n.getPath().length() / 10);
+                     System.out.printf("Path:%s\n%s\n\n", n.getPath(), n.getState());
                   }
 
                   solve = new H2Solver(board);
                   n = solve.solve();
                   if (n != null) {
-                     System.out.printf("H2 depth: %d", n.getPath().length() / 10);
-                     System.out.printf("Path:\n%s\n%s\n\n", n.getPath(), n.getState());
+                     System.out.printf("H2 depth: %d\n", n.getPath().length() / 10);
+                     System.out.printf("Path:%s\n%s\n\n\n", n.getPath(), n.getState());
                   } else {
                      System.out.println();
                   }
                } else {
-                  System.out.println("Not solvable\n");
+                  System.out.println("Not solvable\n\n");
                }
             }
          }

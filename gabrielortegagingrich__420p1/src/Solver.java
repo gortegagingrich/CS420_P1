@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -59,14 +60,111 @@ public abstract class Solver {
     * @return
     */
    public Node solve() {
-      Node end = null;
+      Node current = null;
+      Node next;
+      int index;
 
-      System.out.println("Solve has not been implemented yet");
-      for (Node n : frontier.values()) {
-         System.out.printf("H(initial): %s\n", n.h);
+      // frontier and visited are already created
+
+      // while frontier is not empty
+      solve:
+      while (!frontier.isEmpty()) {
+         // make sure current starts null
+         current = null;
+
+         // find least
+         for (Node n : frontier.values()) {
+            if (current == null || n.h + n.g < current.h + current.g) {
+               current = n;
+            }
+
+            if (current.h == 0) {
+               break solve;
+            }
+         }
+
+         frontier.remove(current.getState());
+         visited.put(current.getState(), current);
+
+         // if current node's h is 0, the puzzle is complete
+
+
+         // find index of 0
+         index = current.getState().indexOf("0");
+         next = null;
+
+         // calculate h(n`) for each possible action
+         int[][] boardCurrent = null, boardNext;
+         int temp;
+
+         // check h for switching to right
+         if (index / 3 < 2) { // if there is a node to the right of 0
+            boardCurrent = Arrays.copyOf(current.getBoard(), 9);
+            temp = boardCurrent[index / 3][index % 3];
+            boardCurrent[index / 3][index % 3] = boardCurrent[index / 3 + 1][index % 3];
+            boardCurrent[index / 3 + 1][index % 3] = temp;
+
+            next = new Node(current, generateState(boardCurrent), h(boardCurrent), current.g + 1);
+
+            if (!visited.containsKey(next.getState()) && !frontier.containsKey(next.getState())) {
+               frontier.put(next.getState(), next);
+            }
+         }
+
+         // check for switching to left
+         if (index / 3 > 0) {
+            boardCurrent = Arrays.copyOf(current.getBoard(), 9);
+            temp = boardCurrent[index / 3][index % 3];
+            boardCurrent[index / 3][index % 3] = boardCurrent[index / 3 - 1][index % 3];
+            boardCurrent[index / 3 - 1][index % 3] = temp;
+
+            next = new Node(current, generateState(boardCurrent), h(boardCurrent), current.g + 1);
+
+            if (!visited.containsKey(next.getState()) && !frontier.containsKey(next.getState())) {
+               frontier.put(next.getState(), next);
+            }
+         }
+
+         // check for switching up
+         if (index % 3 > 0) {
+            boardCurrent = Arrays.copyOf(current.getBoard(), 9);
+            temp = boardCurrent[index / 3][index % 3];
+            boardCurrent[index / 3][index % 3] = boardCurrent[index / 3][index % 3 - 1];
+            boardCurrent[index / 3][index % 3 - 1] = temp;
+
+            next = new Node(current, generateState(boardCurrent), h(boardCurrent), current.g + 1);
+
+            if (!visited.containsKey(next.getState()) && !frontier.containsKey(next.getState())) {
+               frontier.put(next.getState(), next);
+            }
+         }
+
+         // check for switching down
+         if (index % 3 < 2) {
+            boardCurrent = Arrays.copyOf(current.getBoard(), 9);
+            temp = boardCurrent[index / 3][index % 3];
+            boardCurrent[index / 3][index % 3] = boardCurrent[index / 3][index % 3 + 1];
+            boardCurrent[index / 3][index % 3 + 1] = temp;
+
+            next = new Node(current, generateState(boardCurrent), h(boardCurrent), current.g + 1);
+
+            if (!visited.containsKey(next.getState()) && !frontier.containsKey(next.getState())) {
+               frontier.put(next.getState(), next);
+            }
+         }
       }
 
-      return end;
+      return current;
+   }
+
+   private String generateState(int[][] board) {
+      String out = "";
+
+      for (int i = 0; i < 9; i++) {
+         out = String.format("%s%d", out, board[i / 3][i % 3]);
+      }
+
+      return out;
    }
 
    abstract public int h(int[][] board);
