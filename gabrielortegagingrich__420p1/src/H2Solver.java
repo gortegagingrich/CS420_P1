@@ -6,16 +6,18 @@ public class H2Solver extends Solver {
 
     public H2Solver(int[][] board) throws NoEmptyTileException {
         super(board);
-
-        sumH = 0;
     }
 
-    private int h2() {
+    public int h() {
+        return h(board);
+    }
+
+    public int h(int[][] board) {
         int out = 0;
         int expectedX, expectedY, distance;
 
         for (int i = 0; i < 9; i++) {
-            if (board[i/3][i%3] != 0) {
+            if (board[i / 3][i % 3] != 0) {
                 expectedX = board[i / 3][i % 3] / 3;
                 expectedY = board[i / 3][i % 3] % 3;
 
@@ -26,10 +28,5 @@ public class H2Solver extends Solver {
         }
 
         return out;
-    }
-
-    @Override
-    public int solve() {
-        return h2();
     }
 }

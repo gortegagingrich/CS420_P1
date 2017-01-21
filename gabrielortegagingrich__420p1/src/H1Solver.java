@@ -1,16 +1,23 @@
+import java.util.Arrays;
+import java.util.HashMap;
+
 /**
  * Created by Gabriel on 2017/01/18.
  */
 public class H1Solver extends Solver {
    private int sumH;
 
+   private HashMap<String, Node> frontier, visited;
+
    public H1Solver(int[][] board) throws NoEmptyTileException {
       super(board);
-
-      sumH = 0;
    }
 
-   private int h1() {
+   public int h() {
+      return h(board);
+   }
+
+   public int h(int[][] board) {
       int out = 0;
 
       for (int i = 0; i < 9; i++) {
@@ -20,10 +27,5 @@ public class H1Solver extends Solver {
       }
 
       return out;
-   }
-
-   @Override
-   public int solve() {
-      return h1();
    }
 }
