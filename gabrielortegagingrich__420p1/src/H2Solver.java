@@ -2,7 +2,6 @@
  * Created by gabriel on 1/18/17.
  */
 public class H2Solver extends Solver {
-    private int sumH;
 
     public H2Solver(int[][] board) throws NoEmptyTileException {
         super(board);

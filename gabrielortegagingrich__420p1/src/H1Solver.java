@@ -1,13 +1,7 @@
-import java.util.Arrays;
-import java.util.HashMap;
-
 /**
  * Created by Gabriel on 2017/01/18.
  */
 public class H1Solver extends Solver {
-   private int sumH;
-
-   private HashMap<String, Node> frontier, visited;
 
    public H1Solver(int[][] board) throws NoEmptyTileException {
       super(board);

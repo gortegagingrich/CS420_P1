@@ -83,73 +83,77 @@ public abstract class Solver {
             }
          }
 
-         frontier.remove(current.getState());
-         visited.put(current.getState(), current);
+         if (current != null) {
+            frontier.remove(current.getState());
+            visited.put(current.getState(), current);
+         }
 
          // if current node's h is 0, the puzzle is complete
 
 
          // find index of 0
-         index = current.getState().indexOf("0");
-         next = null;
+         if (current != null) {
+            index = current.getState().indexOf("0");
 
-         // calculate h(n`) for each possible action
-         int[][] boardCurrent = null, boardNext;
-         int temp;
 
-         // check h for switching to right
-         if (index / 3 < 2) { // if there is a node to the right of 0
-            boardCurrent = Arrays.copyOf(current.getBoard(), 9);
-            temp = boardCurrent[index / 3][index % 3];
-            boardCurrent[index / 3][index % 3] = boardCurrent[index / 3 + 1][index % 3];
-            boardCurrent[index / 3 + 1][index % 3] = temp;
+            // calculate h(n`) for each possible action
+            int[][] boardCurrent;
+            int temp;
 
-            next = new Node(current, generateState(boardCurrent), h(boardCurrent), current.g + 1);
+            // check h for switching to right
+            if (index / 3 < 2) { // if there is a node to the right of 0
+               boardCurrent = Arrays.copyOf(current.getBoard(), 9);
+               temp = boardCurrent[index / 3][index % 3];
+               boardCurrent[index / 3][index % 3] = boardCurrent[index / 3 + 1][index % 3];
+               boardCurrent[index / 3 + 1][index % 3] = temp;
 
-            if (!visited.containsKey(next.getState()) && !frontier.containsKey(next.getState())) {
-               frontier.put(next.getState(), next);
+               next = new Node(current, generateState(boardCurrent), h(boardCurrent), current.g + 1);
+
+               if (!visited.containsKey(next.getState()) && !frontier.containsKey(next.getState())) {
+                  frontier.put(next.getState(), next);
+               }
             }
-         }
 
-         // check for switching to left
-         if (index / 3 > 0) {
-            boardCurrent = Arrays.copyOf(current.getBoard(), 9);
-            temp = boardCurrent[index / 3][index % 3];
-            boardCurrent[index / 3][index % 3] = boardCurrent[index / 3 - 1][index % 3];
-            boardCurrent[index / 3 - 1][index % 3] = temp;
+            // check for switching to left
+            if (index / 3 > 0) {
+               boardCurrent = Arrays.copyOf(current.getBoard(), 9);
+               temp = boardCurrent[index / 3][index % 3];
+               boardCurrent[index / 3][index % 3] = boardCurrent[index / 3 - 1][index % 3];
+               boardCurrent[index / 3 - 1][index % 3] = temp;
 
-            next = new Node(current, generateState(boardCurrent), h(boardCurrent), current.g + 1);
+               next = new Node(current, generateState(boardCurrent), h(boardCurrent), current.g + 1);
 
-            if (!visited.containsKey(next.getState()) && !frontier.containsKey(next.getState())) {
-               frontier.put(next.getState(), next);
+               if (!visited.containsKey(next.getState()) && !frontier.containsKey(next.getState())) {
+                  frontier.put(next.getState(), next);
+               }
             }
-         }
 
-         // check for switching up
-         if (index % 3 > 0) {
-            boardCurrent = Arrays.copyOf(current.getBoard(), 9);
-            temp = boardCurrent[index / 3][index % 3];
-            boardCurrent[index / 3][index % 3] = boardCurrent[index / 3][index % 3 - 1];
-            boardCurrent[index / 3][index % 3 - 1] = temp;
+            // check for switching up
+            if (index % 3 > 0) {
+               boardCurrent = Arrays.copyOf(current.getBoard(), 9);
+               temp = boardCurrent[index / 3][index % 3];
+               boardCurrent[index / 3][index % 3] = boardCurrent[index / 3][index % 3 - 1];
+               boardCurrent[index / 3][index % 3 - 1] = temp;
 
-            next = new Node(current, generateState(boardCurrent), h(boardCurrent), current.g + 1);
+               next = new Node(current, generateState(boardCurrent), h(boardCurrent), current.g + 1);
 
-            if (!visited.containsKey(next.getState()) && !frontier.containsKey(next.getState())) {
-               frontier.put(next.getState(), next);
+               if (!visited.containsKey(next.getState()) && !frontier.containsKey(next.getState())) {
+                  frontier.put(next.getState(), next);
+               }
             }
-         }
 
-         // check for switching down
-         if (index % 3 < 2) {
-            boardCurrent = Arrays.copyOf(current.getBoard(), 9);
-            temp = boardCurrent[index / 3][index % 3];
-            boardCurrent[index / 3][index % 3] = boardCurrent[index / 3][index % 3 + 1];
-            boardCurrent[index / 3][index % 3 + 1] = temp;
+            // check for switching down
+            if (index % 3 < 2) {
+               boardCurrent = Arrays.copyOf(current.getBoard(), 9);
+               temp = boardCurrent[index / 3][index % 3];
+               boardCurrent[index / 3][index % 3] = boardCurrent[index / 3][index % 3 + 1];
+               boardCurrent[index / 3][index % 3 + 1] = temp;
 
-            next = new Node(current, generateState(boardCurrent), h(boardCurrent), current.g + 1);
+               next = new Node(current, generateState(boardCurrent), h(boardCurrent), current.g + 1);
 
-            if (!visited.containsKey(next.getState()) && !frontier.containsKey(next.getState())) {
-               frontier.put(next.getState(), next);
+               if (!visited.containsKey(next.getState()) && !frontier.containsKey(next.getState())) {
+                  frontier.put(next.getState(), next);
+               }
             }
          }
       }

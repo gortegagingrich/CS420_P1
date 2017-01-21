@@ -2,9 +2,10 @@
  * Created by gabriel on 1/19/17.
  */
 public class Node {
-   int h, g;
-   private String[] prevStates;
-   private String state;
+   final int h;
+   final int g;
+   private final String[] prevStates;
+   private final String state;
 
    public Node(Node prev, String state, int h, int g) {
       if (prev == null) {
