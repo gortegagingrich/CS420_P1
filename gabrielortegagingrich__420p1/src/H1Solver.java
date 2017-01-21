@@ -13,10 +13,12 @@ public class H1Solver extends Solver {
       super(board);
    }
 
-   public int h() {
-      return h(board);
-   }
-
+   /**
+    * Number of incorrect tiles
+    *
+    * @param board
+    * @return
+    */
    public int h(int[][] board) {
       int out = 0;
 

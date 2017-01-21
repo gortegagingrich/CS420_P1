@@ -8,10 +8,12 @@ public class H2Solver extends Solver {
         super(board);
     }
 
-    public int h() {
-        return h(board);
-    }
-
+    /**
+     * Manhattan Distance
+     *
+     * @param board
+     * @return
+     */
     public int h(int[][] board) {
         int out = 0;
         int expectedX, expectedY, distance;

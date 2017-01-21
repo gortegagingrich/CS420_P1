@@ -4,14 +4,13 @@ import java.util.HashMap;
  * Created by Gabriel on 2017/01/18.
  */
 public abstract class Solver {
-   protected int[] board[], empty;
    private HashMap<String, Node> frontier, visited;
 
    public Solver(int[][] board) throws NoEmptyTileException {
-      this.board = board;
+      int[] empty = null;
 
       for (int i = 0; i < board.length; i++) {
-         empty = new int[]{i/3, i%3};
+         empty = new int[]{i / 3, i % 3};
       }
 
       if (empty == null) {
@@ -36,168 +35,39 @@ public abstract class Solver {
       int inversionCount = 0;
       int left, right;
 
-      for (int i = 0; i < 8; i++) {
-         if (board[i / 3][i % 3] == 0) {
-            i++;
-         }
-
-         left = board[i / 3][i % 3];
-
-         if (board[(i + 1) / 3][(i + 1) % 3] == 0) {
-            i++;
-         }
-
-         if (i > 7) {
-            break;
-         }
-
-         right = board[(i + 1) / 3][(i + 1) % 3];
-
-         if (left > right) {
-            if (inversionCount == 0) {
-               // inversionCount++;
+      // for each tile as left index
+      for (left = 0; left < 8; left++) {
+         // if the left index is not 0
+         if (board[left / 3][left % 3] != 0) {
+            // for each following tile as right index
+            for (right = left + 1; right < 8; right++) {
+               // if the right index is not 0 and left index > right index
+               if (board[right / 3][right % 3] != 0 && board[left / 3][left % 3] > board[right / 3][right % 3]) {
+                  // increment inversion count
+                  inversionCount++;
+               }
             }
-            inversionCount++;
          }
       }
 
-      return (inversionCount%2 == 0);
+      // if inversion count is even, return true
+      // else return false
+      return (inversionCount % 2 == 0);
    }
 
    /**
     * @return
     */
    public Node solve() {
-      Node min = null, nextNode = null;
-      int out = 0;
-      int x, y;
+      Node end = null;
 
-      while (!frontier.isEmpty()) {
-         // find node with minimum h in frontier
-         min = null;
-         nextNode = null;
-
-         for (Node node : frontier.values()) {
-            if (min == null || node.h < min.h) {
-               min = node;
-            }
-         }
-
-         // remove node with minimum h from frontier and add to visited
-         frontier.remove(min.getState(), min);
-         visited.put(min.getState(), min);
-
-         // h == 0 -> the puzzle is solved
-         if (min.h == 0) {
-            break;
-         }
-
-         // find H for each of minimum node's possible successors
-         // find position of 0
-         int i = min.getState().indexOf("0");
-         int[][] board;
-         int tmp;
-         String state;
-
-         x = i / 3;
-         y = i % 3;
-
-         // check move left
-         if (x > 0) {
-            board = min.getBoard();
-            tmp = board[x - 1][y];
-            board[x - 1][y] = board[x][y];
-            board[x][y] = tmp;
-
-            state = "";
-
-            for (int[] row : board) {
-               for (int j : row) {
-                  state = String.format("%s%d", state, j);
-               }
-            }
-
-            if (!visited.containsKey(state)) {
-               nextNode = new Node(min, state, h(board), min.g + 1);
-            }
-         }
-
-         // check move down
-         if (y < 2) {
-            board = min.getBoard();
-            tmp = board[x][y + 1];
-            board[x][y + 1] = board[x][y];
-            board[x][y] = tmp;
-
-            state = "";
-
-            for (int[] row : board) {
-               for (int j : row) {
-                  state = String.format("%s%d", state, j);
-               }
-            }
-
-            if (!visited.containsKey(state)) {
-               if ((nextNode != null && h(board) < nextNode.h) || nextNode == null) {
-                  nextNode = new Node(min, state, h(board), min.g + 1);
-               }
-            }
-         }
-
-         // check move right
-         if (x < 2) {
-            board = min.getBoard();
-            tmp = board[x + 1][y];
-            board[x + 1][y] = board[x][y];
-            board[x][y] = tmp;
-
-            state = "";
-
-            for (int[] row : board) {
-               for (int j : row) {
-                  state = String.format("%s%d", state, j);
-               }
-            }
-
-            if (!visited.containsKey(state)) {
-               if ((nextNode != null && h(board) < nextNode.h) || nextNode == null) {
-                  nextNode = new Node(min, state, h(board), min.g + 1);
-               }
-            }
-         }
-
-         // check move up
-         if (y > 0) {
-            board = min.getBoard();
-            tmp = board[x][y - 1];
-            board[x][y - 1] = board[x][y];
-            board[x][y] = tmp;
-
-            state = "";
-
-            for (int[] row : board) {
-               for (int j : row) {
-                  state = String.format("%s%d", state, j);
-               }
-            }
-
-            if (!visited.containsKey(state)) {
-               if ((nextNode != null && h(board) < nextNode.h) || nextNode == null) {
-                  nextNode = new Node(min, state, h(board), 0);
-               }
-            }
-         }
-
-         // add minimum to frontier with incremented g
-         if (nextNode != null) {
-            frontier.put(nextNode.getState(), nextNode);
-         }
+      System.out.println("Solve has not been implemented yet");
+      for (Node n : frontier.values()) {
+         System.out.printf("H(initial): %s\n", n.h);
       }
 
-      return min;
+      return end;
    }
-
-   abstract public int h();
 
    abstract public int h(int[][] board);
 }
