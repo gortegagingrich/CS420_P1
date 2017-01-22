@@ -55,4 +55,13 @@ public class Node {
    public int getDepth() {
       return prevStates.length;
    }
+
+   public int compare(Node n) {
+      int out;
+
+      out = (g + h) - (n.g + n.h);
+
+      return out;
+   }
 }
+

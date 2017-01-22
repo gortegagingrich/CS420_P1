@@ -1,4 +1,7 @@
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -18,41 +21,113 @@ public class CS420P1 {
          int i;
          int count = 0;
 
-         while (scan.hasNext() && (str = scan.nextLine()) != null) {
-            if (str.length() == 9) {
-               System.out.printf("Puzzle: %s\n", str);
+         for (int j = 0; j < 10; j++) {
+            str = generateRandomPuzzle(10000);
+            System.out.printf("Puzzle: %s\n", str);
 
-               i = 0;
-               board = new int[3][3];
+            i = 0;
+            board = new int[3][3];
 
-               for (char c : str.toCharArray()) {
-                  board[i / 3][i++ % 3] = c - '0';
+            for (char c : str.toCharArray()) {
+               board[i / 3][i++ % 3] = c - '0';
+            }
+
+            // need to rewrite isSolvable() because it currently does not work
+            if (true || Solver.isSolvable(board)) {
+               solve = new H1Solver(board);
+               n = solve.solve();
+               if (n != null) {
+                  System.out.printf("H1 depth: %d\n", n.getPath().length() / 10);
                }
 
-               if (Solver.isSolvable(board)) {
-                  solve = new H1Solver(board);
-                  n = solve.solve();
-                  if (n != null) {
-                     System.out.printf("H1 depth: %d\n", n.getPath().length() / 10);
-                     System.out.printf("Path:%s\n%s\n\n", n.getPath(), n.getState());
-                  }
-
-                  solve = new H2Solver(board);
-                  n = solve.solve();
-                  if (n != null) {
-                     System.out.printf("H2 depth: %d\n", n.getPath().length() / 10);
-                     System.out.printf("Path:%s\n%s\n\n\n", n.getPath(), n.getState());
-                  } else {
-                     System.out.println();
-                  }
+               solve = new H2Solver(board);
+               n = solve.solve();
+               if (n != null) {
+                  System.out.printf("H2 depth: %d\n\n", n.getPath().length() / 10);
                } else {
-                  System.out.println("Not solvable\n\n");
+                  System.out.println();
                }
+            } else {
+               System.out.println("Not solvable\n\n");
             }
          }
 
       } catch (Exception e) {
          e.printStackTrace();
       }
+   }
+
+   private static String generateRandomPuzzle() {
+      String str = "012345678";
+      ArrayList<Character> list = new ArrayList<>();
+
+      for (char c : str.toCharArray()) {
+         list.add(c);
+      }
+
+      Collections.shuffle(list);
+
+      str = "";
+
+      for (char c : list) {
+         str += c;
+      }
+
+      return str;
+   }
+
+   private static String generateRandomPuzzle(int depth) {
+      String out = "", str = "";
+      Random rand = new Random();
+      int[][] board = {{0, 1, 2}, {3, 4, 5}, {6, 7, 8}};
+      int x = 0;
+      int y = 0;
+      int index;
+
+      boolean[] possibleMoves = {true, false, false, true}; // right, up, left, down
+
+      for (int i = 0; i <= depth; i++) {
+         for (; !possibleMoves[(index = rand.nextInt(4))]; ) {
+            // randomly choose a possible swap direction
+         }
+
+         switch (index) {
+            case 0:
+               // swap with right
+               swap(board, x + 1, y, x, y);
+               x++;
+               break;
+            case 1:
+               // swap with up
+               swap(board, x, y - 1, x, y);
+               y--;
+               break;
+            case 2:
+               // swap with left
+               swap(board, x - 1, y, x, y);
+               x--;
+               break;
+            case 3:
+               swap(board, x, y + 1, x, y);
+               y++;
+         }
+
+         possibleMoves[0] = (x < 2) ? true : false;
+         possibleMoves[1] = (y > 0) ? true : false;
+         possibleMoves[2] = (x > 0) ? true : false;
+         possibleMoves[3] = (y < 2) ? true : false;
+      }
+
+      for (int i = 0; i < 9; i++) {
+         out += Integer.toString(board[i / 3][i % 3]);
+      }
+
+      return out;
+   }
+
+   private static void swap(int[][] list, int x1, int y1, int x2, int y2) {
+      int temp = list[x1][y1];
+      list[x1][y1] = list[x2][y2];
+      list[x2][y2] = temp;
    }
 }

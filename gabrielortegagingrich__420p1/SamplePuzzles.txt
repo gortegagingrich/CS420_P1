@@ -25,3 +25,6 @@ Length 20:
 
 other:
 140652738
+
+31 total steps:
+647058321

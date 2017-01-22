@@ -1,11 +1,15 @@
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.PriorityQueue;
 
 /**
  * Created by Gabriel on 2017/01/18.
  */
 public abstract class Solver {
+   // the hashmaps allow for indexing by the puzzle layout for quick lookups
    private HashMap<String, Node> frontier, visited;
+   // this is to speed up searching for the node in the frontier with  the lowest value of h(n) + g(n)
+   private PriorityQueue<Node> frontierQueue;
 
    public Solver(int[][] board) throws NoEmptyTileException {
       int[] empty = null;
@@ -29,9 +33,13 @@ public abstract class Solver {
       Node n = new Node(null, tmp, h(board), 0);
       frontier.put(n.getState(), n);
 
+      frontierQueue = new PriorityQueue<>(new NodeComparator());
+      frontierQueue.add(n);
+
       visited = new HashMap<>();
    }
 
+   // does not seem to work at the moment
    public static boolean isSolvable(int[][] board) {
       int inversionCount = 0;
       int left, right;
@@ -67,20 +75,14 @@ public abstract class Solver {
       // frontier and visited are already created
 
       // while frontier is not empty
-      solve:
       while (!frontier.isEmpty()) {
          // make sure current starts null
          current = null;
 
-         // find least
-         for (Node n : frontier.values()) {
-            if (current == null || n.h + n.g < current.h + current.g) {
-               current = n;
-            }
+         current = frontierQueue.poll();
 
-            if (current.h == 0) {
-               break solve;
-            }
+         if (current.h == 0) {
+            break;
          }
 
          if (current != null) {
@@ -111,6 +113,7 @@ public abstract class Solver {
 
                if (!visited.containsKey(next.getState()) && !frontier.containsKey(next.getState())) {
                   frontier.put(next.getState(), next);
+                  frontierQueue.add(next);
                }
             }
 
@@ -125,6 +128,7 @@ public abstract class Solver {
 
                if (!visited.containsKey(next.getState()) && !frontier.containsKey(next.getState())) {
                   frontier.put(next.getState(), next);
+                  frontierQueue.add(next);
                }
             }
 
@@ -139,6 +143,7 @@ public abstract class Solver {
 
                if (!visited.containsKey(next.getState()) && !frontier.containsKey(next.getState())) {
                   frontier.put(next.getState(), next);
+                  frontierQueue.add(next);
                }
             }
 
@@ -153,11 +158,13 @@ public abstract class Solver {
 
                if (!visited.containsKey(next.getState()) && !frontier.containsKey(next.getState())) {
                   frontier.put(next.getState(), next);
+                  frontierQueue.add(next);
                }
             }
          }
       }
 
+      System.out.printf("Nodes visited: %d\n", visited.size());
       return current;
    }
 
