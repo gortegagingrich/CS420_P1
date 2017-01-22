@@ -49,7 +49,7 @@ public abstract class Solver {
          // if the left index is not 0
          if (board[left / 3][left % 3] != 0) {
             // for each following tile as right index
-            for (right = left + 1; right < 8; right++) {
+            for (right = left + 1; right < 9; right++) {
                // if the right index is not 0 and left index > right index
                if (board[right / 3][right % 3] != 0 && board[left / 3][left % 3] > board[right / 3][right % 3]) {
                   // increment inversion count

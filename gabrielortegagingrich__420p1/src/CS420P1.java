@@ -21,8 +21,13 @@ public class CS420P1 {
          int i;
          int count = 0;
 
-         for (int j = 0; j < 10; j++) {
-            str = generateRandomPuzzle(10000);
+         while (scan.hasNext()) {
+            str = scan.nextLine();
+
+            if (str.length() != 9) {
+               continue;
+            }
+
             System.out.printf("Puzzle: %s\n", str);
 
             i = 0;
@@ -33,7 +38,7 @@ public class CS420P1 {
             }
 
             // need to rewrite isSolvable() because it currently does not work
-            if (true || Solver.isSolvable(board)) {
+            if (Solver.isSolvable(board)) {
                solve = new H1Solver(board);
                n = solve.solve();
                if (n != null) {

@@ -17,7 +17,7 @@ public class H1Solver extends Solver {
       int out = 0;
 
       for (int i = 0; i < 9; i++) {
-         if (board[i/3][i%3] != 0 && board[i/3][i%3] != i) {
+         if (board[i / 3][i % 3] != 0 && board[i / 3][i % 3] != i) {
             out++;
          }
       }

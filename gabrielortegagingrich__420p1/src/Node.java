@@ -9,13 +9,13 @@ public class Node {
 
    public Node(Node prev, String state, int h, int g) {
       if (prev == null) {
-         prevStates = new String[] {};
+         prevStates = new String[]{};
       } else {
          prevStates = new String[prev.prevStates.length + 1];
 
          int i = 0;
 
-         while (i < prevStates.length-1) {
+         while (i < prevStates.length - 1) {
             prevStates[i] = prev.prevStates[i++];
          }
 
