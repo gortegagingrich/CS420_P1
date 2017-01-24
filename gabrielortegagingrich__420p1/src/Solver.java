@@ -5,13 +5,13 @@ import java.util.PriorityQueue;
 /**
  * Created by Gabriel on 2017/01/18.
  */
-public abstract class Solver {
-   // the hashmaps allow for indexing by the puzzle layout for quick lookups
-   private HashMap<String, Node> frontier, visited;
+abstract class Solver {
+   // the hash maps allow for indexing by the puzzle layout for quick lookups
+   private HashMap<String, Node> frontier, expanded;
    // this is to speed up searching for the node in the frontier with  the lowest value of h(n) + g(n)
    private PriorityQueue<Node> frontierQueue;
 
-   public Solver(int[][] board) throws NoEmptyTileException {
+   Solver(int[][] board) throws NoEmptyTileException {
       int[] empty = null;
 
       for (int i = 0; i < board.length; i++) {
@@ -36,11 +36,11 @@ public abstract class Solver {
       frontierQueue = new PriorityQueue<>(new NodeComparator());
       frontierQueue.add(n);
 
-      visited = new HashMap<>();
+      expanded = new HashMap<>();
    }
 
    // does not seem to work at the moment
-   public static boolean isSolvable(int[][] board) {
+   static boolean isSolvable(int[][] board) {
       int inversionCount = 0;
       int left, right;
 
@@ -67,104 +67,99 @@ public abstract class Solver {
    /**
     * @return
     */
-   public Node solve() {
+   Node solve() {
       Node current = null;
       Node next;
       int index;
 
-      // frontier and visited are already created
+      // frontier and expanded are already created
 
       // while frontier is not empty
       while (!frontier.isEmpty()) {
-         // make sure current starts null
-         current = null;
-
          current = frontierQueue.poll();
 
          if (current.h == 0) {
             break;
          }
 
-         if (current != null) {
-            frontier.remove(current.getState());
-            visited.put(current.getState(), current);
-         }
+         frontier.remove(current.getState());
+         expanded.put(current.getState(), current);
 
          // if current node's h is 0, the puzzle is complete
 
 
          // find index of 0
-         if (current != null) {
-            index = current.getState().indexOf("0");
+
+         index = current.getState().indexOf("0");
 
 
-            // calculate h(n`) for each possible action
-            int[][] boardCurrent;
-            int temp;
+         // calculate h(n`) for each possible action
+         int[][] boardCurrent;
+         int temp;
 
-            // check h for switching to right
-            if (index / 3 < 2) { // if there is a node to the right of 0
-               boardCurrent = Arrays.copyOf(current.getBoard(), 9);
-               temp = boardCurrent[index / 3][index % 3];
-               boardCurrent[index / 3][index % 3] = boardCurrent[index / 3 + 1][index % 3];
-               boardCurrent[index / 3 + 1][index % 3] = temp;
+         // check h for switching to right
+         if (index / 3 < 2) { // if there is a node to the right of 0
+            boardCurrent = Arrays.copyOf(current.getBoard(), 9);
+            temp = boardCurrent[index / 3][index % 3];
+            boardCurrent[index / 3][index % 3] = boardCurrent[index / 3 + 1][index % 3];
+            boardCurrent[index / 3 + 1][index % 3] = temp;
 
-               next = new Node(current, generateState(boardCurrent), h(boardCurrent), current.g + 1);
+            next = new Node(current, generateState(boardCurrent), h(boardCurrent), current.g + 1);
 
-               if (!visited.containsKey(next.getState()) && !frontier.containsKey(next.getState())) {
-                  frontier.put(next.getState(), next);
-                  frontierQueue.add(next);
-               }
+            if (!expanded.containsKey(next.getState()) && !frontier.containsKey(next.getState())) {
+               frontier.put(next.getState(), next);
+               frontierQueue.add(next);
             }
+         }
 
-            // check for switching to left
-            if (index / 3 > 0) {
-               boardCurrent = Arrays.copyOf(current.getBoard(), 9);
-               temp = boardCurrent[index / 3][index % 3];
-               boardCurrent[index / 3][index % 3] = boardCurrent[index / 3 - 1][index % 3];
-               boardCurrent[index / 3 - 1][index % 3] = temp;
+         // check for switching to left
+         if (index / 3 > 0) {
+            boardCurrent = Arrays.copyOf(current.getBoard(), 9);
+            temp = boardCurrent[index / 3][index % 3];
+            boardCurrent[index / 3][index % 3] = boardCurrent[index / 3 - 1][index % 3];
+            boardCurrent[index / 3 - 1][index % 3] = temp;
 
-               next = new Node(current, generateState(boardCurrent), h(boardCurrent), current.g + 1);
+            next = new Node(current, generateState(boardCurrent), h(boardCurrent), current.g + 1);
 
-               if (!visited.containsKey(next.getState()) && !frontier.containsKey(next.getState())) {
-                  frontier.put(next.getState(), next);
-                  frontierQueue.add(next);
-               }
+            if (!expanded.containsKey(next.getState()) && !frontier.containsKey(next.getState())) {
+               frontier.put(next.getState(), next);
+               frontierQueue.add(next);
             }
+         }
 
-            // check for switching up
-            if (index % 3 > 0) {
-               boardCurrent = Arrays.copyOf(current.getBoard(), 9);
-               temp = boardCurrent[index / 3][index % 3];
-               boardCurrent[index / 3][index % 3] = boardCurrent[index / 3][index % 3 - 1];
-               boardCurrent[index / 3][index % 3 - 1] = temp;
+         // check for switching up
+         if (index % 3 > 0) {
+            boardCurrent = Arrays.copyOf(current.getBoard(), 9);
+            temp = boardCurrent[index / 3][index % 3];
+            boardCurrent[index / 3][index % 3] = boardCurrent[index / 3][index % 3 - 1];
+            boardCurrent[index / 3][index % 3 - 1] = temp;
 
-               next = new Node(current, generateState(boardCurrent), h(boardCurrent), current.g + 1);
+            next = new Node(current, generateState(boardCurrent), h(boardCurrent), current.g + 1);
 
-               if (!visited.containsKey(next.getState()) && !frontier.containsKey(next.getState())) {
-                  frontier.put(next.getState(), next);
-                  frontierQueue.add(next);
-               }
+            if (!expanded.containsKey(next.getState()) && !frontier.containsKey(next.getState())) {
+               frontier.put(next.getState(), next);
+               frontierQueue.add(next);
             }
+         }
 
-            // check for switching down
-            if (index % 3 < 2) {
-               boardCurrent = Arrays.copyOf(current.getBoard(), 9);
-               temp = boardCurrent[index / 3][index % 3];
-               boardCurrent[index / 3][index % 3] = boardCurrent[index / 3][index % 3 + 1];
-               boardCurrent[index / 3][index % 3 + 1] = temp;
+         // check for switching down
+         if (index % 3 < 2) {
+            boardCurrent = Arrays.copyOf(current.getBoard(), 9);
+            temp = boardCurrent[index / 3][index % 3];
+            boardCurrent[index / 3][index % 3] = boardCurrent[index / 3][index % 3 + 1];
+            boardCurrent[index / 3][index % 3 + 1] = temp;
 
-               next = new Node(current, generateState(boardCurrent), h(boardCurrent), current.g + 1);
+            next = new Node(current, generateState(boardCurrent), h(boardCurrent), current.g + 1);
 
-               if (!visited.containsKey(next.getState()) && !frontier.containsKey(next.getState())) {
-                  frontier.put(next.getState(), next);
-                  frontierQueue.add(next);
-               }
+            if (!expanded.containsKey(next.getState()) && !frontier.containsKey(next.getState())) {
+               frontier.put(next.getState(), next);
+               frontierQueue.add(next);
             }
          }
       }
 
-      System.out.printf("Nodes visited: %d\n", visited.size());
+      // print out number of expanded nodes
+      System.out.printf("%d\n", expanded.size());
       return current;
    }
 
@@ -178,5 +173,5 @@ public abstract class Solver {
       return out;
    }
 
-   abstract public int h(int[][] board);
+   protected abstract int h(int[][] board);
 }
