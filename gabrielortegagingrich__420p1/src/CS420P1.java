@@ -40,15 +40,14 @@ public class CS420P1 {
             // need to rewrite isSolvable() because it currently does not work
             if (Solver.isSolvable(board)) {
                solve = new H1Solver(board);
+               System.out.printf("H1 expanded nodes: ");
                n = solve.solve();
-               if (n != null) {
-                  System.out.printf("H1 depth: %d\n", n.getPath().length() / 10);
-               }
 
                solve = new H2Solver(board);
+               System.out.printf("H2 expanded nodes: ");
                n = solve.solve();
                if (n != null) {
-                  System.out.printf("H2 depth: %d\n\n", n.getPath().length() / 10);
+                  System.out.printf("depth: %d\n\n", n.getPath().length() / 10);
                } else {
                   System.out.println();
                }
@@ -92,8 +91,10 @@ public class CS420P1 {
       boolean[] possibleMoves = {true, false, false, true}; // right, up, left, down
 
       for (int i = 0; i <= depth; i++) {
-         for (; !possibleMoves[(index = rand.nextInt(4))]; ) {
-            // randomly choose a possible swap direction
+         while (true) {
+            if (possibleMoves[(index = rand.nextInt(4))]) {
+               break;
+            }
          }
 
          switch (index) {
@@ -117,10 +118,10 @@ public class CS420P1 {
                y++;
          }
 
-         possibleMoves[0] = (x < 2) ? true : false;
-         possibleMoves[1] = (y > 0) ? true : false;
-         possibleMoves[2] = (x > 0) ? true : false;
-         possibleMoves[3] = (y < 2) ? true : false;
+         possibleMoves[0] = (x < 2);
+         possibleMoves[1] = (y > 0);
+         possibleMoves[2] = (x > 0);
+         possibleMoves[3] = (y < 2);
       }
 
       for (int i = 0; i < 9; i++) {

@@ -11,6 +11,7 @@ public class H1Solver extends Solver {
     * Number of incorrect tiles
     *
     * @param board
+    *
     * @return
     */
    public int h(int[][] board) {

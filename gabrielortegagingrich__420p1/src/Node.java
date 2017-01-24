@@ -1,13 +1,13 @@
 /**
  * Created by gabriel on 1/19/17.
  */
-public class Node {
-   final int h;
-   final int g;
+class Node {
+   final         int      h;
+   final         int      g;
    private final String[] prevStates;
-   private final String state;
+   private final String   state;
 
-   public Node(Node prev, String state, int h, int g) {
+   Node(Node prev, String state, int h, int g) {
       if (prev == null) {
          prevStates = new String[]{};
       } else {
@@ -26,13 +26,14 @@ public class Node {
 
       this.h = h;
       this.g = g;
+
    }
 
-   public String getState() {
+   String getState() {
       return state;
    }
 
-   public int[][] getBoard() {
+   int[][] getBoard() {
       int[][] board = new int[3][3];
 
       for (int i = 0; i < 9; i++) {
@@ -42,7 +43,7 @@ public class Node {
       return board;
    }
 
-   public String getPath() {
+   String getPath() {
       String str = "";
 
       for (String state : prevStates) {
@@ -50,18 +51,6 @@ public class Node {
       }
 
       return str;
-   }
-
-   public int getDepth() {
-      return prevStates.length;
-   }
-
-   public int compare(Node n) {
-      int out;
-
-      out = (g + h) - (n.g + n.h);
-
-      return out;
    }
 }
 

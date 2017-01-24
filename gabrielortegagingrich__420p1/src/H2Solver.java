@@ -11,6 +11,7 @@ public class H2Solver extends Solver {
     * Manhattan Distance
     *
     * @param board
+    *
     * @return
     */
    public int h(int[][] board) {
