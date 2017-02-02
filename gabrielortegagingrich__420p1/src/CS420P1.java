@@ -59,10 +59,11 @@ public class CS420P1 {
       Solver solver;
       String str;
       int[][] board = new int[3][3];
-      int i = 0;
+      int i;
       Scanner scan = new Scanner(System.in);
 
       for (; ; ) {
+         i = 0;
          System.out.print("Enter a puzzle in one line (012345678): ");
 
          str = scan.nextLine();

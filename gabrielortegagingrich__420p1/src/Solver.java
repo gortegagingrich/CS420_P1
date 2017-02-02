@@ -6,10 +6,19 @@ import java.util.PriorityQueue;
  * Created by Gabriel on 2017/01/18.
  */
 abstract class Solver {
-   // the hash maps allow for indexing by the puzzle layout for quick lookups
-   private HashMap<String, Node> frontier, expanded;
+   // the hash maps allow for indexing by the puzzle layout for quick lookups while keeping track of the actual node
+   private HashMap<String, Node> frontier;
    // this is to speed up searching for the node in the frontier with  the lowest value of h(n) + g(n)
    private PriorityQueue<Node> frontierQueue;
+   /*
+   Java implements Hash Maps in a way that if it does not contain a given key,
+   it will search through the list with a linear complexity depending on the hash.
+   This happens many times in A*, so I decided to use a kind of graph based on
+   a 9-ary trie to keep all lookups down to a consistent 9 checks at most.
+   I did not use this for the frontier though because removing would be more expensive
+   and it is generally going to be smaller
+    */
+   private VisitedSet expanded;
 
    Solver(int[][] board) throws NoEmptyTileException {
       int[] empty = null;
@@ -36,7 +45,7 @@ abstract class Solver {
       frontierQueue = new PriorityQueue<>(new NodeComparator());
       frontierQueue.add(n);
 
-      expanded = new HashMap<>();
+      expanded = new VisitedSet();
    }
 
    // does not seem to work at the moment
@@ -83,7 +92,7 @@ abstract class Solver {
          }
 
          frontier.remove(current.getState());
-         expanded.put(current.getState(), current);
+         expanded.addState(current.getState());
 
          // if current node's h is 0, the puzzle is complete
 
@@ -106,7 +115,7 @@ abstract class Solver {
 
             next = new Node(current, generateState(boardCurrent), h(boardCurrent), current.g + 1);
 
-            if (!expanded.containsKey(next.getState()) && !frontier.containsKey(next.getState())) {
+            if (!expanded.contains(next.getState()) && !frontier.containsKey(next.getState())) {
                frontier.put(next.getState(), next);
                frontierQueue.add(next);
             }
@@ -121,7 +130,7 @@ abstract class Solver {
 
             next = new Node(current, generateState(boardCurrent), h(boardCurrent), current.g + 1);
 
-            if (!expanded.containsKey(next.getState()) && !frontier.containsKey(next.getState())) {
+            if (!expanded.contains(next.getState()) && !frontier.containsKey(next.getState())) {
                frontier.put(next.getState(), next);
                frontierQueue.add(next);
             }
@@ -136,7 +145,7 @@ abstract class Solver {
 
             next = new Node(current, generateState(boardCurrent), h(boardCurrent), current.g + 1);
 
-            if (!expanded.containsKey(next.getState()) && !frontier.containsKey(next.getState())) {
+            if (!expanded.contains(next.getState()) && !frontier.containsKey(next.getState())) {
                frontier.put(next.getState(), next);
                frontierQueue.add(next);
             }
@@ -151,7 +160,7 @@ abstract class Solver {
 
             next = new Node(current, generateState(boardCurrent), h(boardCurrent), current.g + 1);
 
-            if (!expanded.containsKey(next.getState()) && !frontier.containsKey(next.getState())) {
+            if (!expanded.contains(next.getState()) && !frontier.containsKey(next.getState())) {
                frontier.put(next.getState(), next);
                frontierQueue.add(next);
             }

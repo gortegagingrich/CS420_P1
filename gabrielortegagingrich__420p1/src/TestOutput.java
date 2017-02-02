@@ -14,7 +14,7 @@ public class TestOutput {
    private String[] strings;
 
 
-   public TestOutput(HashMap<String, Node> frontier, HashMap<String, Node> expanded, Node result) {
+   public TestOutput(HashMap<String, Node> frontier, VisitedSet expanded, Node result) {
       ints = new int[]{result.getDepth(), expanded.size(), frontier.size(), expanded.size() + frontier.size()};
       strings = new String[]{result.getPath(), result.getState()};
    }

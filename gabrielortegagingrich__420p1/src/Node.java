@@ -72,7 +72,7 @@ class Node {
    }
 
    int getDepth() {
-      int out = prevStates.length + 1;
+      int out = prevStates.length;
 
       return out;
    }
