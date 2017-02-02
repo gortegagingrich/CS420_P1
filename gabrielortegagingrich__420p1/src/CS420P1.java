@@ -6,12 +6,31 @@ import java.util.Scanner;
  */
 public class CS420P1 {
    public static void main(String[] args) throws NoEmptyTileException {
-      testRandom();
-      testInput();
+      Scanner in = new Scanner(System.in);
+
+      main:
+      for (; ; ) {
+         System.out.print("Chose an option:\n(1) Solve random puzzle\n(2) Enter your own puzzle\n(3) Exit\n> ");
+
+         switch (in.nextLine()) {
+            case "1":
+               testRandom();
+               break;
+            case "2":
+               testInput();
+               break;
+            case "3":
+               break main;
+            default:
+               System.out.println("Invalid input\n");
+               break;
+         }
+      }
    }
 
+
    private static void testRandom() throws NoEmptyTileException {
-      String str = generateRandomPuzzle(30);
+      String str = generateRandomPuzzle(50);
       Solver solver;
       int i = 0;
       int[][] list = new int[3][3];
@@ -20,8 +39,17 @@ public class CS420P1 {
          list[i / 3][i++ % 3] = c - '0';
       }
 
+      System.out.println("Puzzle: ");
+      for (i = 0; i < 9; ) {
+         System.out.print(list[i / 3][i++ % 3]);
+
+         if (i % 3 == 0) {
+            System.out.println();
+         }
+      }
+
       solver = new H1Solver(list);
-      System.out.printf("Puzzle: %s\n\nH1:\n%s\n", str, solver.solve().toString());
+      System.out.printf("\nH1:\n%s", solver.solve().toString());
 
       solver = new H2Solver(list);
       System.out.printf("H2:\n%s\n\n", solver.solve().toString());
@@ -51,7 +79,17 @@ public class CS420P1 {
       }
 
       solver = new H1Solver(board);
-      System.out.printf("Puzzle: %s\n\nH1:\n%s\n", str, solver.solve().toString());
+
+      System.out.println("Puzzle: ");
+      for (i = 0; i < 9; ) {
+         System.out.print(str.charAt(i++));
+
+         if (i % 3 == 0) {
+            System.out.println();
+         }
+      }
+
+      System.out.printf("\nH1:\n%s\n", solver.solve().toString());
 
       solver = new H2Solver(board);
       System.out.printf("H2:\n%s\n\n", solver.solve().toString());

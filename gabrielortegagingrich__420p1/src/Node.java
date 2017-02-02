@@ -47,16 +47,32 @@ class Node {
       String str = "";
 
       for (String state : prevStates) {
-         str = String.format("%s%s\n", str, state);
+         for (int i = 0; i < 9; ) {
+            str += state.charAt(i++);
+
+            if (i % 3 == 0) {
+               str += "\n";
+            }
+         }
+
+         str = String.format("%s\n", str);
       }
 
-      str = String.format("%s%s", str, state);
+      for (int i = 0; i < 9; ) {
+         str += state.charAt(i++);
+
+         if (i % 3 == 0) {
+            str += "\n";
+         }
+      }
+
+      //str = String.format("%s%s", str, state);
 
       return str;
    }
 
    int getDepth() {
-      int out = prevStates.length;
+      int out = prevStates.length + 1;
 
       return out;
    }
