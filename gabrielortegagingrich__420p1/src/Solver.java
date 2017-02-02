@@ -67,7 +67,7 @@ abstract class Solver {
    /**
     * @return
     */
-   Node solve() {
+   TestOutput solve() {
       Node current = null;
       Node next;
       int index;
@@ -158,9 +158,7 @@ abstract class Solver {
          }
       }
 
-      // print out number of expanded nodes
-      System.out.printf("%d\n", expanded.size());
-      return current;
+      return new TestOutput(frontier, expanded, current);
    }
 
    private String generateState(int[][] board) {

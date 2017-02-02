@@ -47,10 +47,18 @@ class Node {
       String str = "";
 
       for (String state : prevStates) {
-         str = String.format("%s\n%s", str, state);
+         str = String.format("%s%s\n", str, state);
       }
 
+      str = String.format("%s%s", str, state);
+
       return str;
+   }
+
+   int getDepth() {
+      int out = prevStates.length;
+
+      return out;
    }
 }
 

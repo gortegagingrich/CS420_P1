@@ -1,6 +1,3 @@
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -9,75 +6,55 @@ import java.util.Scanner;
  */
 public class CS420P1 {
    public static void main(String[] args) throws NoEmptyTileException {
-      int[][] board;
-
-      try {
-         File file = new File("SamplePuzzles.txt");
-         Scanner scan = new Scanner(file);
-         String str;
-         Solver solve;
-         Node n;
-
-         int i;
-         int count = 0;
-
-         while (scan.hasNext()) {
-            str = scan.nextLine();
-
-            if (str.length() != 9) {
-               continue;
-            }
-
-            System.out.printf("Puzzle: %s\n", str);
-
-            i = 0;
-            board = new int[3][3];
-
-            for (char c : str.toCharArray()) {
-               board[i / 3][i++ % 3] = c - '0';
-            }
-
-            // need to rewrite isSolvable() because it currently does not work
-            if (Solver.isSolvable(board)) {
-               solve = new H1Solver(board);
-               System.out.printf("H1 expanded nodes: ");
-               n = solve.solve();
-
-               solve = new H2Solver(board);
-               System.out.printf("H2 expanded nodes: ");
-               n = solve.solve();
-               if (n != null) {
-                  System.out.printf("depth: %d\n\n", n.getPath().length() / 10);
-               } else {
-                  System.out.println();
-               }
-            } else {
-               System.out.println("Not solvable\n\n");
-            }
-         }
-
-      } catch (Exception e) {
-         e.printStackTrace();
-      }
+      testRandom();
+      testInput();
    }
 
-   private static String generateRandomPuzzle() {
-      String str = "012345678";
-      ArrayList<Character> list = new ArrayList<>();
+   private static void testRandom() throws NoEmptyTileException {
+      String str = generateRandomPuzzle(30);
+      Solver solver;
+      int i = 0;
+      int[][] list = new int[3][3];
 
       for (char c : str.toCharArray()) {
-         list.add(c);
+         list[i / 3][i++ % 3] = c - '0';
       }
 
-      Collections.shuffle(list);
+      solver = new H1Solver(list);
+      System.out.printf("Puzzle: %s\n\nH1:\n%s\n", str, solver.solve().toString());
 
-      str = "";
+      solver = new H2Solver(list);
+      System.out.printf("H2:\n%s\n\n", solver.solve().toString());
+   }
 
-      for (char c : list) {
-         str += c;
+   private static void testInput() throws NoEmptyTileException {
+      Solver solver;
+      String str;
+      int[][] board = new int[3][3];
+      int i = 0;
+      Scanner scan = new Scanner(System.in);
+
+      for (; ; ) {
+         System.out.print("Enter a puzzle in one line (012345678): ");
+
+         str = scan.nextLine();
+
+         for (char c : str.toCharArray()) {
+            board[i / 3][i++ % 3] = c - '0';
+         }
+
+         if (Solver.isSolvable(board)) {
+            break;
+         }
+
+         System.out.println("Puzzle entered not solvable.");
       }
 
-      return str;
+      solver = new H1Solver(board);
+      System.out.printf("Puzzle: %s\n\nH1:\n%s\n", str, solver.solve().toString());
+
+      solver = new H2Solver(board);
+      System.out.printf("H2:\n%s\n\n", solver.solve().toString());
    }
 
    private static String generateRandomPuzzle(int depth) {
